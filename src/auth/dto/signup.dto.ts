@@ -16,7 +16,6 @@ export class SignupDto {
 
   @IsString()
   @MinLength(6)
-  @IsString()
   @Matches(/^(?=.*\d)/, {
     message: 'Password must contain at least one number',
   })
