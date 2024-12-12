@@ -58,12 +58,12 @@ export class AuthService {
     const tokens = await this.generateUserToken(user._id);
     return {
       ...tokens,
-      userId: user.id,
+      user: user,
     };
   }
 
   async refreshTokens(refreshToken: string) {
-    const token = await this.refreshTokenModel.findOneAndDelete({
+    const token = await this.refreshTokenModel.findOne({
       token: refreshToken,
       expiryDate: { $gte: new Date() },
     });
@@ -92,6 +92,10 @@ export class AuthService {
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 3);
 
-    await this.refreshTokenModel.create({ token, userId, expiryDate });
+    await this.refreshTokenModel.updateOne(
+      { userId },
+      { $set: { expiryDate, token } },
+      { upsert: true },
+    );
   }
 }
