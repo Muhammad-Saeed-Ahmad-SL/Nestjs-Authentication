@@ -26,7 +26,6 @@ export class AuthService {
     const emailInUse = await this.userModel.findOne({
       email,
     });
-    console.log(emailInUse);
 
     if (emailInUse) {
       throw new BadRequestException('Email already in use');
